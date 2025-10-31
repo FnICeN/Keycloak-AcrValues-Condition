@@ -1,8 +1,10 @@
 # Keycloak AcrValues Condition
 
-这是一个Keycloak条件控制器插件，可根据`acr_values`值控制子认证流的执行，在使用Keycloak搭建逐级增强的认证流程的场景下可以发挥理想作用
+这是一个Keycloak条件控制器插件，可根据**OIDC的额外参数**：`acr_values`控制子认证流的执行，在使用Keycloak搭建逐级增强的认证流程的场景下可以发挥理想作用
 
-Keycloak原生并不支持直接读取客户端上下文进行条件判断，但`acr_values`作为OIDC协议中的一个参数，应当被识别、读取，因而诞生了此插件
+## 应用场景
+
+需要使用Keycloak完成认证服务，同时有对认证强度**动态调控**的需求，每次进行认证时，可能需要在`acr_values`属性标记不同的值表示**本次需要的认证强度**，这种需求场景下原本的`acr_values`调控能力较弱，于是使用**额外参数的形式**向Keycloak传递一个自定义参数如`acr_values=totp`
 
 # 部署
 
@@ -64,13 +66,13 @@ Keycloak原生并不支持直接读取客户端上下文进行条件判断，但
 
 > [!NOTE]
 >
-> 若遵循OIDC协议，需保证包含`acr_values`参数，或至少确保`authenticationFlowContext`中存在`acr_values`属性
+> 若遵循OIDC协议，需保证在额外参数中包含`acr_values`，或至少确保`authenticationFlowContext`中存在`acr_values`属性
 
 ## 启用插件
 
 1. 以admin身份登录Keycloak管理后台
 2. 边栏选择【身份验证】，再点击进入某流程详情页
-3. 新建一个子流程
+3. 新建一个子流程，需求设置为【基于一定条件】
 4. 为子流程新增条件，选择【Condition - 判断认证强度】
 5. 将条件需求设置为【必需】
 6. 点击条件栏右侧小齿轮，配置需要匹配的`acr_values`值
